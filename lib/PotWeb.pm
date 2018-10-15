@@ -26,6 +26,9 @@ sub startup {
   my $r = $self->routes;
 
   # Normal route to controller
+
+  $r->get('/node/join')->to('node#join')->name('node');
+  $r->get('/node/alive')->to('node#alive')->name('node');
   $r->any('/api/*myfunc')->to('system#api');
   $r->get('/public/*file')->to('system#main');
   $r->get('/ipfs/:id/*file')->to('system#ipfs');

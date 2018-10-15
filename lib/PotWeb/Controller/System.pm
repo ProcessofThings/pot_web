@@ -40,7 +40,7 @@ sub main {
  }
  ($id,undef) = split /:/, $id;
  if (-d "/home/node/dev/$id") {
-	print "Loading Local\n";
+	print "Main Loading Local\n";
 	$file = "/home/node/dev/$id/$file";
 	$c->res->content->asset(Mojo::Asset::File->new(path => $file));
   $c->rendered(200);

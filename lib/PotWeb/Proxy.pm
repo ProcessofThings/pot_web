@@ -15,11 +15,14 @@ sub register {
       my %args = @_;
       my $content_type = {};
       my $method = 'get';
+      my $file = '';
       $url->query($c->req->params) if ($args{with_query_params});
       $method = lc($args{method}) if ($args{method});
       if (Mojo::IOLoop->is_running) {
         $c->render_later;
+        if (defined($file)) {}
         $content_type = {'Content-Type' => $c->req->headers->content_type} if ($c->req->headers->content_type);
+        $c->debug("content Type");
         $c->debug($content_type);
         my $json = {};
         $json = encode_json($c->req->json);
