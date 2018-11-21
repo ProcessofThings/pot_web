@@ -28,23 +28,38 @@ sub main {
 # my $file = $c->req->url->to_abs;
  my $file;
  if (defined($c->param('file'))) {
+		$c->debug('file detected');
 		$file = $c->req->url->to_abs->path;
  } else {
 		$file = "index.html";
  }
  my $id;
  if ($redis->exists('url_'.$host)) {
+	$c->debug('Found Host on Redis');
    $id = $redis->get('url_'.$host);
+   $c->session->{urlid} = $id;
  } else {
-   $id = $c->ipfshash;
+   $id = "QmYEzhKy1ZB3dcZtyKrUnqJyp7ZnQQK8EkofUa8Whu2RdM";
  }
- ($id,undef) = split /:/, $id;
+ if (defined($c->param('url'))) {
+ $c->debug("url");
+	$host = $c->param('url');
+	if ($redis->exists('url_'.$host)) {
+   $id = $redis->get('url_'.$host);
+   $c->session->{urlid} = $id;
+	} else {
+   $id = "QmYEzhKy1ZB3dcZtyKrUnqJyp7ZnQQK8EkofUa8Whu2RdM";
+	}
+}
+ $c->debug($c->session);
+ ($id,undef) = split /:/, $c->session->{urlid};
  if (-d "/home/node/dev/$id") {
 	print "Main Loading Local\n";
 	$file = "/home/node/dev/$id/$file";
 	$c->res->content->asset(Mojo::Asset::File->new(path => $file));
   $c->rendered(200);
  } else {
+	$c->debug('Loading IPFS');
 	my $base = "http://127.0.0.1:8080/ipfs/$id/$file";
 	$c->proxy_to($base);
  }

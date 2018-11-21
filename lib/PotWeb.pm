@@ -13,6 +13,11 @@ sub startup {
   my $self = shift;
   my $redis = Mojo::Redis2->new;
 	my $ipfshash = "QmYEzhKy1ZB3dcZtyKrUnqJyp7ZnQQK8EkofUa8Whu2RdM";
+	
+	$self->app->secrets(["adfhh920hlaksdhf02hlkdfhaasdfhg92hfajksdhfkjgdskjfaksdfasdf"]);
+	my $sessions = Mojolicious::Sessions->new;
+	$self->sessions->cookie_name('pot_web');
+  $self->sessions->default_expiration('3600');
 
   # Load configuration from hash returned by "my_app.conf"
   my $config = $self->plugin('Config');

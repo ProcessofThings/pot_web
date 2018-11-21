@@ -27,6 +27,8 @@ sub register {
         my $json = {};
         $json = encode_json($c->req->json);
         $c->debug($json);
+        $c->ua->max_redirects(3);
+        $c->ua->max_response_size(0);
         $c->ua->$method(
           $url => $content_type 
           => $json =>
@@ -46,6 +48,7 @@ sub register {
  
 sub _proxy_tx {
   my ($self, $tx) = @_;
+  $self->debug($tx->res);
   if (my $res = $tx->success) {
     $self->tx->res($res);
     $self->rendered;
