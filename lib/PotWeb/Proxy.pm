@@ -29,6 +29,7 @@ sub register {
         $c->debug($json);
         $c->ua->max_redirects(3);
         $c->ua->max_response_size(0);
+        $c->ua->inactivity_timeout(120);
         $c->ua->$method(
           $url => $content_type 
           => $json =>
@@ -56,6 +57,8 @@ sub _proxy_tx {
   else {
     my $error = $tx->error;
     my $json = $tx->res->json;
+    $self->debug($error);
+    $self->debug($json);
     $self->tx->res->headers->add('X-Remote-Status',
       $error->{code} . ': ' . $error->{message});
     $self->render(json => $json, status => $error->{code});

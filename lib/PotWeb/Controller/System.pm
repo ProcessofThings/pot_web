@@ -22,6 +22,12 @@ sub api {
 	$c->proxy_to($base,'with_query_params' => 1, 'method' => $method);
 }
 
+sub redirect {
+    my $self = shift;
+    my $secure = $self->req->url->to_abs->scheme('https')->port(443);
+    $self->redirect_to($secure);
+}
+
 sub main {
  my $c = shift;
  my $host = $c->req->url->to_abs->host;

@@ -18,11 +18,14 @@ sub startup {
 	my $sessions = Mojolicious::Sessions->new;
 	$self->sessions->cookie_name('pot_web');
   $self->sessions->default_expiration('3600');
+  $self->sessions->cookie_name('session');
+  $self->session('sessionid' => "some value");
 
   # Load configuration from hash returned by "my_app.conf"
   my $config = $self->plugin('Config');
 
   # Documentation browser under "/perldoc"
+  $self->plugin('ACME');
   $self->plugin('PODRenderer') if $config->{perldoc};
   $self->plugin('DebugDumperHelper');
   $self->plugin('PotWeb::Proxy');
