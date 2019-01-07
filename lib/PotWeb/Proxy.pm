@@ -16,12 +16,16 @@ sub register {
       my $content_type = {};
       my $method = 'get';
       my $file = '';
+      my $requrl;
       $url->query($c->req->params) if ($args{with_query_params});
       $method = lc($args{method}) if ($args{method});
+      $requrl = lc($args{url}) if ($args{url});
       if (Mojo::IOLoop->is_running) {
         $c->render_later;
         if (defined($file)) {}
         $content_type = {'Content-Type' => $c->req->headers->content_type} if ($c->req->headers->content_type);
+        my $headers;
+        $headers->{'X-Url'} = $requrl;
         $c->debug("content Type");
         $c->debug($content_type);
         my $json = {};
@@ -31,7 +35,7 @@ sub register {
         $c->ua->max_response_size(0);
         $c->ua->inactivity_timeout(120);
         $c->ua->$method(
-          $url => $content_type 
+          $url => $headers
           => $json =>
           sub {
             my ($self, $tx) = @_;

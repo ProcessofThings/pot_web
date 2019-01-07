@@ -19,7 +19,7 @@ sub api {
 #	my $base = 'http://127.0.0.1:9090/testapi';
 	$c->debug($base);
 	
-	$c->proxy_to($base,'with_query_params' => 1, 'method' => $method);
+	$c->proxy_to($base,'with_query_params' => 1, 'method' => $method, 'url' => $host);
 }
 
 sub redirect {
