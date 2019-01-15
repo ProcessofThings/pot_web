@@ -23,11 +23,11 @@ sub register {
       if (Mojo::IOLoop->is_running) {
         $c->render_later;
         if (defined($file)) {}
-        $content_type = {'Content-Type' => $c->req->headers->content_type} if ($c->req->headers->content_type);
         my $headers;
+        $headers->{'Content-Type'} = $c->req->headers->content_type if ($c->req->headers->content_type);
         $headers->{'X-Url'} = $requrl;
-        $c->debug("content Type");
-        $c->debug($content_type);
+        $c->debug("headers");
+        $c->debug($headers);
         my $json = {};
         $json = encode_json($c->req->json);
         $c->debug($json);
@@ -61,6 +61,7 @@ sub _proxy_tx {
   else {
     my $error = $tx->error;
     my $json = $tx->res->json;
+    $self->debug("Error");
     $self->debug($error);
     $self->debug($json);
     $self->tx->res->headers->add('X-Remote-Status',

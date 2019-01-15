@@ -13,13 +13,13 @@ sub startup {
   my $self = shift;
   my $redis = Mojo::Redis2->new;
 	my $ipfshash = "QmYEzhKy1ZB3dcZtyKrUnqJyp7ZnQQK8EkofUa8Whu2RdM";
+   my $hex;
 	
 	$self->app->secrets(["adfhh920hlaksdhf02hlkdfhaasdfhg92hfajksdhfkjgdskjfaksdfasdf"]);
 	my $sessions = Mojolicious::Sessions->new;
 	$self->sessions->cookie_name('pot_web');
   $self->sessions->default_expiration('3600');
   $self->sessions->cookie_name('session');
-  $self->session('sessionid' => "some value");
 
   # Load configuration from hash returned by "my_app.conf"
   my $config = $self->plugin('Config');
@@ -30,19 +30,21 @@ sub startup {
   $self->plugin('DebugDumperHelper');
   $self->plugin('PotWeb::Proxy');
 
-  # Router
+   # Router
   my $r = $self->routes;
 
   # Normal route to controller
 
   $r->get('/node/join')->to('node#join')->name('node');
   $r->get('/node/alive')->to('node#alive')->name('node');
+  $r->get('/redirect')->to('system#redirect');
   $r->any('/api/*myfunc')->to('system#api');
   $r->get('/public/*file')->to('system#main');
   $r->get('/ipfs/:id/*file')->to('system#ipfs');
   $r->any('/secure/*file')->to('system#secure');
   $r->get('/')->to('system#main');
   $r->get('/*file')->to('system#main');
+
 }
 
 1;
