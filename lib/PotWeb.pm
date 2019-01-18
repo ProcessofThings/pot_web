@@ -28,6 +28,7 @@ sub startup {
   $self->plugin('ACME');
   $self->plugin('PODRenderer') if $config->{perldoc};
   $self->plugin('DebugDumperHelper');
+  $self->plugin('PotWeb::Helpers');
   $self->plugin('PotWeb::Proxy');
 
    # Router
@@ -41,7 +42,6 @@ sub startup {
   $r->any('/api/*myfunc')->to('system#api');
   $r->get('/public/*file')->to('system#main');
   $r->get('/ipfs/:id/*file')->to('system#ipfs');
-  $r->any('/secure/*file')->to('system#secure');
   $r->get('/')->to('system#main');
   $r->get('/*file')->to('system#main');
 

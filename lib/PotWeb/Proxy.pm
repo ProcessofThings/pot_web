@@ -17,15 +17,18 @@ sub register {
       my $method = 'get';
       my $file = '';
       my $requrl;
+      my $sessionKey;
       $url->query($c->req->params) if ($args{with_query_params});
       $method = lc($args{method}) if ($args{method});
       $requrl = lc($args{url}) if ($args{url});
+      $sessionKey = $args{sessionKey} if ($args{sessionKey});
       if (Mojo::IOLoop->is_running) {
         $c->render_later;
         if (defined($file)) {}
         my $headers;
         $headers->{'Content-Type'} = $c->req->headers->content_type if ($c->req->headers->content_type);
         $headers->{'X-Url'} = $requrl;
+        $headers->{'X-Session'} = $sessionKey || '';
         $c->debug("headers");
         $c->debug($headers);
         my $json = {};
