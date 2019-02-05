@@ -56,7 +56,7 @@ sub register {
  
 sub _proxy_tx {
   my ($self, $tx) = @_;
-  $self->debug($tx->res);
+ # $self->debug($tx->res);
   if (my $res = $tx->success) {
     $self->tx->res($res);
     $self->rendered;
@@ -66,7 +66,7 @@ sub _proxy_tx {
     my $json = $tx->res->json;
     $self->debug("Error");
     $self->debug($error);
-    $self->debug($json);
+#    $self->debug($json);
     $self->tx->res->headers->add('X-Remote-Status',
       $error->{code} . ': ' . $error->{message});
     $self->render(json => $json, status => $error->{code});

@@ -20,7 +20,7 @@ sub api {
     $sessionKey = $c->session->{usersession};
     my (undef, $blockchain) = split /:/, $id;
     if ($redis->exists('test_api_' . $host)) {
-      $url = "http://127.0.0.1:9090/public";
+      $url = "http://127.0.0.1:9090/public/custom";
     } else {
       $url = "http://127.0.0.1:9090/v1/api/multichain";
     }
@@ -48,7 +48,7 @@ sub main {
   my $id;
 
   my $checkid = $c->session->{urlid};
-  $c->debug("Main $checkid");
+  $c->debug("Main $checkid $host");
   ## Check if file is defined or used default index.html
 
   if (defined($c->param('file'))) {
@@ -76,7 +76,8 @@ sub main {
     my $ip = $c->tx->{remote_address} || '0.0.0.0';
     my $xforward = $c->req->headers->header('X-Forwarded-For') || '0.0.0.0';
     $c->debug("Host Request $host $ip $xforward");
-    exit;
+#    $c->render(json => {'message' => 'Permissions Denied'}, status => 401);
+    return 1;
   }
 
   ## Allow override if url param is passed
