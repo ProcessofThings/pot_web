@@ -15,7 +15,7 @@ sub api {
   my $url;
   $c->debug($c->req);
   my $id;
-  if (($redis->exists('url_' . $host)) && (defined($c->session->{usersession}))) {
+  if (($redis->exists('url_' . $host))) {
     $id = $redis->get('url_' . $host);
     $sessionKey = $c->session->{usersession};
     my (undef, $blockchain) = split /:/, $id;
